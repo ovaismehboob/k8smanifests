@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: daprtest
+  labels:
+    app: daprtest
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: daprtest
+  template:
+    metadata:
+      labels:
+        app: daprtest
+    spec:
+      containers:
+      - name: daprtest
+        image: ovmehboooasregistry.azurecr.io/daprtest:2.0
+        ports:
+        - containerPort: 5220
+      imagePullSecrets:
+      - name: ghqsecret
+
+---
+apiVersion: v1
+kind: Service
+metadata:  
+  name: daprtest
+  labels:
+    app: daprtest
+spec:
+  ports:
+  - port: 5220
+    targetPort: 5220
+    protocol: TCP
+  type: LoadBalancer
+  selector:
+    app: daprtest
